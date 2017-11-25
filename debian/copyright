@@ -1,0 +1,36 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: pg_cron
+Source: https://github.com/citusdata/pg_cron
+
+Files: *
+Copyright: Copyright (c) 2015-2017 Citus Data
+License: citus
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose, without fee, and without a written agreement is
+ hereby granted, provided that the above copyright notice and this paragraph
+ and the following two paragraphs appear in all copies.
+ .
+ IN NO EVENT SHALL CITUS DATA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING
+ OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF CITUS DATA HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ .
+ CITUS DATA SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+ TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND CITUS
+ DATA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
+ ENHANCEMENTS, OR MODIFICATIONS.
+
+Files: src/entry.c src/misc.c
+Copyright: Copyright 1988,1990,1993,1994 by Paul Vixie
+License: cron
+ All rights reserved
+ .
+ Distribute freely, except: don't remove my name from the source or
+ documentation (don't take credit for my work), mark your changes (don't
+ get me blamed for your possible bugs), don't alter or remove this
+ notice.  May be sold if buildable source is provided to buyer.  No
+ warrantee of any kind, express or implied, is included with this
+ software; use at your own risk, responsibility for damages (if any) to
+ anyone resulting from the use of this software rests entirely with the
+ user.

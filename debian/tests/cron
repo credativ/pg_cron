@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eux
+trap "sed -i -e '/# added by pg_cron testsuite/,$ d' $HOME/.pgpass" 0 2 3 15
+
+for ver in $(pg_buildext supported-versions); do
+	pg_virtualenv -v $ver -o 'shared_preload_libraries=pg_cron' <<-'EOT'
+		set -eux
+		umask 077
+		echo "# added by pg_cron testsuite" >> $HOME/.pgpass
+		echo "localhost:$PGPORT:$PGUSER:$PGDATABASE:$PGPASSWORD" >> $HOME/.pgpass
+		psql -eX <<-'EOF'
+			\set ON_ERROR_STOP
+			CREATE EXTENSION pg_cron;
+			SELECT cron.schedule('* * * * *', 'CREATE TABLE foo()');
+			SELECT * FROM cron.job;
+			SELECT pg_sleep(70);
+			SELECT * FROM foo;
+		EOF
+	EOT
+done

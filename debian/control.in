@@ -1,0 +1,16 @@
+Source: pg-cron
+Section: database
+Priority: optional
+Maintainer: Debian PostgreSQL Maintainers <pkg-postgresql-public@lists.alioth.debian.org>
+Uploaders: Christoph Berg <myon@debian.org>
+Build-Depends: debhelper (>= 9), postgresql-server-dev-all (>= 153~)
+Standards-Version: 4.1.1
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-postgresql/pg-cron.git/
+Vcs-Git: https://anonscm.debian.org/git/pkg-postgresql/pg-cron.git
+Homepage: https://github.com/citusdata/pg_cron
+
+Package: postgresql-PGVERSION-cron
+Architecture: any
+Depends: postgresql-PGVERSION, ${misc:Depends}, ${shlibs:Depends}
+Description: FIXME PostgreSQL extension pg-cron
+ FIXME long description here
