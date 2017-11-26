@@ -5,8 +5,8 @@ set -eux
 # if running as root, we need to tweak ~postgres/.pgpass
 if [ "$(id -un)" = "root" ]; then
 	export PGPASSFILE="/var/lib/postgresql/.pgpass"
-	umask 077
 	su -c "touch $PGPASSFILE" postgres # create file if it doesn't exist yet
+	chmod 600 $PGPASSFILE
 else
 	export PGPASSFILE="$HOME/.pgpass"
 fi
