@@ -12,5 +12,11 @@ Homepage: https://github.com/citusdata/pg_cron
 Package: postgresql-PGVERSION-cron
 Architecture: any
 Depends: postgresql-PGVERSION, ${misc:Depends}, ${shlibs:Depends}
-Description: FIXME PostgreSQL extension pg-cron
- FIXME long description here
+Description: Run periodic jobs in PostgreSQL
+ pg_cron is a simple cron-based job scheduler for PostgreSQL (9.5 or higher)
+ that runs inside the database as an extension. It uses the same syntax as
+ regular cron, but it allows you to schedule PostgreSQL commands directly from
+ the database. pg_cron can run multiple jobs in parallel, but it runs at most
+ one instance of a job at a time. If a second run is supposed to start before
+ the first one finishes, then the second run is queued and started as soon as
+ the first run completes.

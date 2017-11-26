@@ -8,7 +8,7 @@ for ver in $(pg_buildext supported-versions); do
 		set -eux
 		umask 077
 		echo "# added by pg_cron testsuite" >> $HOME/.pgpass
-		echo "localhost:$PGPORT:$PGUSER:$PGDATABASE:$PGPASSWORD" >> $HOME/.pgpass
+		echo "localhost:$PGPORT:$PGDATABASE:$PGUSER:$PGPASSWORD" >> $HOME/.pgpass
 		psql -eX <<-'EOF'
 			\set ON_ERROR_STOP
 			CREATE EXTENSION pg_cron;
