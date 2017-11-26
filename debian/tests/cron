@@ -1,14 +1,23 @@
 #!/bin/sh
 
 set -eux
-trap "sed -i -e '/# added by pg_cron testsuite/,$ d' $HOME/.pgpass" 0 2 3 15
+
+# if running as root, we need to tweak ~postgres/.pgpass
+if [ "$(id -un)" = "root" ]; then
+	export PGPASSFILE="/var/lib/postgresql/.pgpass"
+	umask 077
+	su -c "touch $PGPASSFILE" postgres # create file if it doesn't exist yet
+else
+	export PGPASSFILE="$HOME/.pgpass"
+fi
+trap "sed -i -e '/# added by pg_cron testsuite/,$ d' $PGPASSFILE" 0 2 3 15
 
 for ver in $(pg_buildext supported-versions); do
 	pg_virtualenv -v $ver -o 'shared_preload_libraries=pg_cron' <<-'EOT'
 		set -eux
 		umask 077
-		echo "# added by pg_cron testsuite" >> $HOME/.pgpass
-		echo "localhost:$PGPORT:$PGDATABASE:$PGUSER:$PGPASSWORD" >> $HOME/.pgpass
+		echo "# added by pg_cron testsuite" >> $PGPASSFILE
+		echo "localhost:$PGPORT:$PGDATABASE:$PGUSER:$PGPASSWORD" >> $PGPASSFILE
 		psql -eX <<-'EOF'
 			\set ON_ERROR_STOP
 			CREATE EXTENSION pg_cron;
