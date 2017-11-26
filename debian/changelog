@@ -1,5 +1,6 @@
 pg-cron (1.0.2-1) UNRELEASED; urgency=medium
 
   * Initial release.
+  * Fix type mismatches on 32bit.
 
  -- Christoph Berg <myon@debian.org>  Sat, 25 Nov 2017 17:25:34 +0100

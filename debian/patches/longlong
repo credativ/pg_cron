@@ -1,0 +1,104 @@
+--- a/src/pg_cron.c
++++ b/src/pg_cron.c
+@@ -9,6 +9,7 @@
+  *-------------------------------------------------------------------------
+  */
+ #include <sys/resource.h>
++#include <inttypes.h>
+ 
+ #include "postgres.h"
+ #include "fmgr.h"
+@@ -912,7 +913,7 @@ ManageCronTask(CronTask *task, Timestamp
+ 			{
+ 				char *command = cronJob->command;
+ 
+-				ereport(LOG, (errmsg("cron job %ld starting: %s",
++				ereport(LOG, (errmsg("cron job %" PRId64 " starting: %s",
+ 									 jobId, command)));
+ 			}
+ 
+@@ -1119,7 +1120,7 @@ ManageCronTask(CronTask *task, Timestamp
+ 							char *cmdStatus = PQcmdStatus(result);
+ 							char *cmdTuples = PQcmdTuples(result);
+ 
+-							ereport(LOG, (errmsg("cron job %ld completed: %s %s",
++							ereport(LOG, (errmsg("cron job %" PRId64 " completed: %s %s",
+ 												 jobId, cmdStatus, cmdTuples)));
+ 						}
+ 
+@@ -1165,7 +1166,7 @@ ManageCronTask(CronTask *task, Timestamp
+ 							char *rowString = ngettext("row", "rows",
+ 													   tupleCount);
+ 
+-							ereport(LOG, (errmsg("cron job %ld completed: "
++							ereport(LOG, (errmsg("cron job %" PRId64 " completed: "
+ 												 "%d %s",
+ 												 jobId, tupleCount,
+ 												 rowString)));
+@@ -1206,7 +1207,7 @@ ManageCronTask(CronTask *task, Timestamp
+ 
+ 			if (task->errorMessage != NULL)
+ 			{
+-				ereport(LOG, (errmsg("cron job %ld %s",
++				ereport(LOG, (errmsg("cron job %" PRId64 " %s",
+ 									 jobId, task->errorMessage)));
+ 
+ 				if (task->freeErrorMessage)
+@@ -1216,7 +1217,7 @@ ManageCronTask(CronTask *task, Timestamp
+ 			}
+ 			else
+ 			{
+-				ereport(LOG, (errmsg("cron job %ld failed", jobId)));
++				ereport(LOG, (errmsg("cron job %" PRId64 " failed", jobId)));
+ 			}
+ 
+ 			task->startDeadline = 0;
+--- a/src/job_metadata.c
++++ b/src/job_metadata.c
+@@ -9,6 +9,8 @@
+  *-------------------------------------------------------------------------
+  */
+ 
++#include <inttypes.h>
++
+ #include "postgres.h"
+ #include "fmgr.h"
+ #include "miscadmin.h"
+@@ -262,7 +264,7 @@ NextJobId(void)
+ 
+ 	SetUserIdAndSecContext(savedUserId, savedSecurityContext);
+ 
+-	jobId = DatumGetUInt32(jobIdDatum);
++	jobId = DatumGetInt64(jobIdDatum);
+ 
+ 	return jobId;
+ }
+@@ -558,14 +560,14 @@ TupleToCronJob(TupleDesc tupleDescriptor
+ 
+ 	Assert(!HeapTupleHasNulls(heapTuple));
+ 
+-	jobKey = DatumGetUInt32(jobId);
++	jobKey = DatumGetInt64(jobId);
+ 	job = hash_search(CronJobHash, &jobKey, HASH_ENTER, &isPresent);
+ 
+-	job->jobId = DatumGetUInt32(jobId);
++	job->jobId = DatumGetInt64(jobId);
+ 	job->scheduleText = TextDatumGetCString(schedule);
+ 	job->command = TextDatumGetCString(command);
+ 	job->nodeName = TextDatumGetCString(nodeName);
+-	job->nodePort = DatumGetUInt32(nodePort);
++	job->nodePort = DatumGetInt32(nodePort);
+ 	job->userName = TextDatumGetCString(userName);
+ 	job->database = TextDatumGetCString(database);
+ 
+@@ -579,8 +581,8 @@ TupleToCronJob(TupleDesc tupleDescriptor
+ 	}
+ 	else
+ 	{
+-		ereport(LOG, (errmsg("invalid pg_cron schedule for job %ld: %s",
+-							 jobId, job->scheduleText)));
++		ereport(LOG, (errmsg("invalid pg_cron schedule for job %" PRId64 ": %s",
++							 job->jobId, job->scheduleText)));
+ 
+ 		/* a zeroed out schedule never runs */
+ 		memset(&job->schedule, 0, sizeof(entry));
