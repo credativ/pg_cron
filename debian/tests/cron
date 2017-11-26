@@ -27,4 +27,5 @@ for ver in $(pg_buildext supported-versions); do
 			SELECT * FROM foo;
 		EOF
 	EOT
+	sed -i -e '/# added by pg_cron testsuite/,$ d' $PGPASSFILE
 done
