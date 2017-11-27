@@ -1,8 +1,8 @@
-pg-cron (1.0.2-1) UNRELEASED; urgency=medium
+pg-cron (1.0.2-1) unstable; urgency=medium
 
   * Initial release.
   * Fix type mismatches on 32bit.
   * Disable warnings about maybe-uninitialized variables, Ubuntu/ppc64el needs
     this for entry.c.
 
- -- Christoph Berg <myon@debian.org>  Sat, 25 Nov 2017 17:25:34 +0100
+ -- Christoph Berg <christoph.berg@credativ.de>  Mon, 27 Nov 2017 10:31:29 +0100
